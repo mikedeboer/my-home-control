@@ -6,7 +6,7 @@ const Noble = require("noble");
 
 var gHarmonyHubs = new HarmonyHub();
 var gRemote;
-Noble.on("stateChange", function(state) {
+Noble.once("stateChange", function(state) {
   if (state == "poweredOn") {
     gRemote = new TurnTouchRemote(Noble, gHarmonyHubs);
   } else {
@@ -17,11 +17,11 @@ Noble.on("stateChange", function(state) {
 function shutdown(err) {
   Noble.stopScanning();
   try {
-    gHarmonyHubs.disconnect();
+    gHarmonyHubs.destructor();
   } catch (ex) {
     console.error("Error whilst disconnecting from hubs:", ex);
   }
-  gRemote.disconnect();
+  gRemote.destructor();
   if (err) {
     console.error("Uncaught Exception:", err);
   }
